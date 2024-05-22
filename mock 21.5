@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "domicilio.h"
+#include "clientes.h"
+
+int getIdNumber(){
+    return(rand()%1000);
+}
+
+int getNroCliento(){
+    return (rand()%1000);
+}
+
+void getName(char name[]){
+    char names[][30]={"Juan","Apolonio","Tulio","Maria","Violeta","Amalio","Juan","Roberto","Antonio","Pedro","Fernando","Jacinto","Anibal","Antonio","Atalayo",
+                           "Bertino","Anastasio","Amor","Arturo","Diego","Mario","Tamaro","Adolfo","Alfonso","Pedro","Alfredo",
+                           "Rolando","Mauro","Amancio","Benicio","Bertin","Ildefonso","Amilcar","Cuchuflito","Jazmino",
+                           "Remilgo"};
+    strcpy(name,names[rand()%(sizeof(names)/30)]);
+}
+
+void getLastName(char lastName[]){
+    char lastNames[][30]={"Fernandez","Gomez","Vlick","Argento","Molina","Gomez","Perez","Rodriguez","Latorre","Fernandez","Torquemada", "Marijuan", "Roca", "Mitre", "Rivadavia",
+                            "San Martin", "Alvarez", "Comizo", "Borges", "Zama", "Recato", "Olvido", "Gil", "Trapero", "Restinga",
+                            "De Antonio", "Ramirez", "Spinetta", "Cortez", "Gonzalez", "Andujar", "San Juan", "Bautista", "Anchorena", "Paso",
+                            "Gaboto","Vega","Vargas","Lloret","Linares","Suarez","Sierra","Amenabar","Blanco","White","Black"};
+    strcpy(lastName, lastNames[rand()%(sizeof(lastNames)/30)]);
+}
+
+int getDNI(){
+    return(rand()%99999999-5000000);
+}
+
+void getCalle(char calle[]){
+    char calles[][50] = {"Avenida Constitución","Boulevard Marítimo","Calle San Martín","Avenida Colón","Avenida Luro",
+                        "Calle Güemes","Avenida Independencia","Calle Mitre","Avenida Juan B. Justo","Calle Alvarado",
+                        "Avenida Jara","Calle 20 de Septiembre","Avenida de los Trabajadores","Calle Rawson","Avenida Champagnat",
+                        "Calle Roca","Avenida Fortunato de la Plaza","Calle Brown","Avenida Edison","Calle Garay","Avenida Mario Bravo",
+                        "Calle Alvear","Avenida Juan B. Justo","Calle Chile","Avenida Pedersen","Calle San Lorenzo","Avenida Libertad",
+                        "Calle España","Avenida Peralta Ramos","Calle Alberti"};
+
+    strcpy(calle, calles[rand()%(sizeof(calles)/30)]);
+}
+
+int getNroCalle(){
+    return(rand()%9999-100);
+}
+
+void getLocalidad(char localidad[]){
+    char localidades[][40]= {"Ushuaia", "Río Grande", "Rawson", "Resistencia", "Catamarca", "San Salvador", "La Rioja",
+        "Mendoza", "Posadas", "Neuquén", "Viedma", "Salta", "San Juan", "San Luis", "Santa Rosa",
+        "Santiago del Estero", "San Miguel de Tucumán", "Paraná", "Santa Fe", "Bariloche", "San Rafael",
+        "Merlo", "Rawson"};
+
+    strcpy(localidad, localidades[rand()%(sizeof(localidades)/20)]);
+}
+
+void getEmail(stCliente a){
+    char mail[50]="";
+    char dominio[]="@gmail.com";
+    strcat(mail,a.nombre);
+    strcat(mail,a.apellido);
+    strcat(mail,dominio);
+
+    strcpy(a.email, mail);
+}
+
+stCliente getClienteRandom(){
+    stCliente a;
+    a.id= getIdNumber();
+    a.nroCliente= getNroCliento();
+    getName(a.nombre);
+    getLastName(a.apellido);
+    a.dni= getDNI();
+    getEmail(a);
+}
