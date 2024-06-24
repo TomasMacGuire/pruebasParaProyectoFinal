@@ -1,0 +1,96 @@
+stMovimiento getMovimientoRandom(int idCuenta) // Retorna un movimiento random
+{
+    stMovimiento m;
+    m.idCuenta = idCuenta;
+    int rango= 150000;
+    srand(time(NULL));
+    m.importe = rand()%2;
+    if(m.importe == 0){
+        m.importe = getImporteRandNegativo();
+    }else{
+        m.importe = getImporteRandPositivo();
+    }
+    if(m.importe<0){
+        getDetalleNeg(m.detalle);
+    }else{
+        getDetallePos(m.detalle);
+    }
+    m.anio = getYear();
+    m.mes = getMonth();
+    m.dia = getDay(m.mes);
+    m.eliminado = 0;
+
+    return m;
+}
+
+int getImporteRandPositivo()// Retorna un importe random positivo
+{
+    int importe;
+    importe = rand()%100001;
+    return importe;
+}
+
+int getImporteRandNegativo()// Retorna un importe random negativo
+{
+    int importe;
+    importe = rand()%100001;
+    importe = importe * -1;
+    return importe;
+}
+
+void getDetallePos(char detalle[]){
+    char detallesPositivos[][100] = {"Deposito de salario","Transferencia","Devolucion de compra","Reembolso","Bonificacion mensual", "Prestamo devuelto", "Descuento aplicado", "Ingreso por venta", "Devolucion de garantia", "Beneficio de compra", "Indemnizacion", "Bonificacion por cumplimiento de objetivos"};
+    strcpy(detalle, detallesPositivos[rand()%sizeof(detallesPositivos)/100]);
+}
+void getDetalleNeg(char detalle[]){
+    char detallesNegativos[][100] = {"Alquiler","Compra en un supermercado","Pago de impuestos","Gasolina", "Cena en restaurante","Pago de patente", "Compra en linea", "Entrada al cine", "Suscripcion mensual", "Servicio de transporte", "Reparacion de vehiculo", "Compra de regalo", "Farmacia", "Ferreteria", "Restaurante", "Pago de transporte"};
+    strcpy(detalle, detallesNegativos[rand()%sizeof(detallesNegativos)/100]);
+}
+
+void cargaMovimientosRandFile(char nombreArchivo[], int cant)//Carga una cantidad de movimientos random al archivo
+{
+    if(cuentaRegistrosArchivo(AR_CUENTA, sizeof(stCuenta))> 0)
+    {
+        FILE*archi = fopen(nombreArchivo, "ab");
+        stMovimiento mov;
+        int i = 0;
+        int num = nroCuentaRand(AR_CUENTA);
+
+        if(archi)
+        {
+            while(i<cant && num!=0)
+            {
+                mov = getMovimientoRandom(num);
+                fwrite(&mov,sizeof(stMovimiento),1,archi);
+                i++;
+            }
+        }
+        fclose(archi);
+    }
+    else
+    {
+        printf("ERROR: La cantidad de cuentas en el sistema es igual a 0. No es posible generar un movimiento sin cuentas");
+    }
+
+
+}
+int nroCuentaRand(char nombreArchivo[]){
+    FILE*archi = fopen(nombreArchivo, "rb");
+    int cant = cuentaRegistrosArchivo(nombreArchivo, sizeof(stCuenta));
+    int pos = 1;
+    stCuenta cuenta;
+    int nro = 0;
+    if(archi){
+        while(nro == 0){
+            pos = rand()%cant;
+            if(pos != 0){
+                fseek(archi,pos-1,0);
+                fread(&cuenta,sizeof(stCuenta),1,archi);
+                nro = cuenta.nroCuenta;
+            }
+        }
+
+        fclose(archi);
+    }
+    return nro;
+}
